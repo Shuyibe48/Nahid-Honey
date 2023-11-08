@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { saveUser } from "../../api/auth";
 
 const SignUp = () => {
     const { createUser, updateUserProfile, setLoading, signInWithGoogle } = useContext(AuthContext)
@@ -22,6 +23,7 @@ const SignUp = () => {
                 updateUserProfile(name)
                     .then(() => {
                         toast.success('Signup successful')
+                        saveUser(result.user)
                         navigate(from, { replace: true })
                         console.log(result);
                     })
@@ -37,6 +39,21 @@ const SignUp = () => {
                 toast.error(err.message)
             })
     };
+
+    // Handle google signin
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+            .then(result => {
+                // save user to db
+                saveUser(result.user)
+                navigate(from, { replace: true })
+            })
+            .catch(err => {
+                setLoading(false)
+                console.log(err.message)
+                toast.error(err.message)
+            })
+    }
 
     return (
         <div className="bg-[#C46A2C] min-h-screen flex items-center justify-center">
@@ -84,7 +101,7 @@ const SignUp = () => {
                     <p>Or sign up with:</p>
                     <button
                         className="mt-2 bg-blue-500 text-white py-1 px-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                        onClick={signInWithGoogle}
+                        onClick={handleGoogleSignIn}
                     >
                         Google
                     </button>

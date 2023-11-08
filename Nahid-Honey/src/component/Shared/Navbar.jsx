@@ -34,7 +34,7 @@ const Navbar = () => {
                         <Link to='cart' className="text-gray-100 text-4xl">
                             <FaCartArrowDown />
                         </Link>
-                        <span className='bg-gray-100 px-1 absolute bottom-7 left-7 rounded-full font-bold text-xs'>5</span>
+                        <span className='bg-gray-100 px-1 absolute bottom-6 left-6 rounded-full font-bold text-xs'>5</span>
                     </div>
                     {user ? (
                         <div className="relative group">
@@ -60,6 +60,9 @@ const Navbar = () => {
                                         </Link>
                                         <Link to='manageProfile'>
                                             <li className='cursor-pointer border-b pb-1 my-2 text-sm'>মেনেজ প্রোফাইল</li>
+                                        </Link>
+                                        <Link to='adminDashboard'>
+                                            <li className='cursor-pointer border-b pb-1 my-2 text-sm'>এডমিন ডেশবোর্ড</li>
                                         </Link>
                                         <li onClick={() => logOut()} className='cursor-pointer border-b pb-1 text-sm'>লগ আউট</li>
                                     </ul>

@@ -2,9 +2,10 @@ import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { saveUser } from "../../api/auth";
 
 const Login = () => {
-    const { signIn, signInWithGoogle } = useContext(AuthContext)
+    const { signIn, signInWithGoogle, setLoading } = useContext(AuthContext)
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -20,6 +21,7 @@ const Login = () => {
         signIn(email, password)
             .then(result => {
                 console.log(result.user)
+                saveUser(result.user)
                 toast.success('Login successful')
                 navigate(from, { replace: true })
             })
@@ -28,6 +30,23 @@ const Login = () => {
                 toast.error('error')
             })
     }
+
+
+    // Handle google signin
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+            .then(result => {
+                // save user to db
+                saveUser(result.user)
+                navigate(from, { replace: true })
+            })
+            .catch(err => {
+                setLoading(false)
+                console.log(err.message)
+                toast.error(err.message)
+            })
+    }
+
 
     return (
         <div className="bg-[#C46A2C] min-h-screen flex items-center justify-center">
@@ -62,7 +81,7 @@ const Login = () => {
                         <p>Or sign up with:</p>
                         <button
                             className="mt-2 bg-blue-500 text-white py-1 px-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                            onClick={signInWithGoogle}
+                            onClick={handleGoogleSignIn}
                         >
                             Google
                         </button>
